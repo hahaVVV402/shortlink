@@ -1,8 +1,10 @@
 package org.nageoffer.shortlink.admin.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
+import org.nageoffer.shortlink.admin.dto.resq.UserActualRespDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 import org.nageoffer.shortlink.admin.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +23,25 @@ public class UserController {
 
     /**
      * 根据用户名获取用户信息
-     *
-     * @param username 用户名
-     * @return 用户信息
      */
     @GetMapping("/api/shortlink/v1/user/{username}")
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
 
         UserRespDTO result = userService.getUserByUsername(username);
         return Results.success(result);
+
+
+    }
+
+    /**
+     * 根据用户名获取无脱敏用户信息
+     * @param username
+     * @return
+     */
+    @GetMapping("/api/shortlink/v1/actual/user/{username}")
+    public Result<UserActualRespDTO> getActualUserByUsername(@PathVariable("username") String username) {
+
+        return Results.success(BeanUtil.toBean(userService.getUserByUsername(username), UserActualRespDTO.class));
 
 
     }
