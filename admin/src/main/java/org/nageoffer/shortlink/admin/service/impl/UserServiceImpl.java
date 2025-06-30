@@ -19,6 +19,20 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
     @Override
+    public Boolean hasUsername(String username) {
+
+        LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
+
+        UserDO userDO = baseMapper.selectOne(queryWrapper);
+
+        if (userDO != null) {
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
         UserDO userDO = baseMapper.selectOne(queryWrapper);
