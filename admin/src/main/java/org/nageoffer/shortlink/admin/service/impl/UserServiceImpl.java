@@ -3,12 +3,14 @@ package org.nageoffer.shortlink.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.exception.ClientException;
 import org.nageoffer.shortlink.admin.common.enums.UserErrorCodeEnum;
 import org.nageoffer.shortlink.admin.dao.entity.UserDO;
 import org.nageoffer.shortlink.admin.dao.mapper.UserMapper;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 import org.nageoffer.shortlink.admin.service.UserService;
+import org.redisson.api.RBloomFilter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,22 +18,10 @@ import org.springframework.stereotype.Service;
  * 用户接口层实现
  */
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
-    @Override
-    public Boolean hasUsername(String username) {
-
-        LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
-
-        UserDO userDO = baseMapper.selectOne(queryWrapper);
-
-        if (userDO != null) {
-                return true;
-        }
-
-        return false;
-    }
-
+    private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
@@ -43,5 +33,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         BeanUtils.copyProperties(userDO, result);
 
         return result;
+    }
+
+    @Override
+    public Boolean hasUsername(String username) {
+
+//        LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
+//
+//        UserDO userDO = baseMapper.selectOne(queryWrapper);
+//
+//        if (userDO != null) {
+//            return true;
+//        }
+//
+//        return false;
+        return userRegisterCachePenetrationBloomFilter.contains(username);
     }
 }
