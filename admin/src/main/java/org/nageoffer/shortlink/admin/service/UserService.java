@@ -45,4 +45,12 @@ public interface UserService extends IService<UserDO> {
      * @return 用户登录响应数据传输对象
      */
     UserLoginRespDTO login(UserLoginReqDTO requestParam);
+
+     /**
+      * 检查用户是否登录
+      * @param username 用户名
+      * @param token 用户令牌
+      * @return 如果用户已登录返回 true，否则返回 false
+      */
+    Boolean checkLogin(String username,String token);
 }

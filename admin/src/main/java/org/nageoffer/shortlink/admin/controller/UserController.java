@@ -74,9 +74,24 @@ public class UserController {
         return Results.success();
     }
 
+    /**
+     * 用户登录
+     * @param requestParam
+     * @return
+     */
     @PostMapping("/api/short-link/v1/user/login")
     public Result<UserLoginRespDTO> login(@RequestBody UserLoginReqDTO requestParam) {
         UserLoginRespDTO result =userService.login(requestParam);
         return Results.success(result);
+    }
+
+    /**
+     * 检查用户是否登录
+     * @param token 用户登录 Token
+     * @return 是否登录
+     */
+    @GetMapping("/api/short-link/v1/user/check-login")
+    public Result<Boolean> checkLogin(@RequestParam("username") String username,@RequestParam("token") String token) {
+        return Results.success(userService.checkLogin(username,token));
     }
 }
