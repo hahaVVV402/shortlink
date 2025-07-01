@@ -4,9 +4,11 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
+import org.nageoffer.shortlink.admin.dto.req.UserLoginReqDTO;
 import org.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
 import org.nageoffer.shortlink.admin.dto.req.UserUpdateReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserActualRespDTO;
+import org.nageoffer.shortlink.admin.dto.resq.UserLoginRespDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 import org.nageoffer.shortlink.admin.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -70,5 +72,11 @@ public class UserController {
     public Result<Void> update(@RequestBody UserUpdateReqDTO requestParam) {
         userService.update(requestParam);
         return Results.success();
+    }
+
+    @PostMapping("/api/short-link/v1/user/login")
+    public Result<UserLoginRespDTO> login(@RequestBody UserLoginReqDTO requestParam) {
+        UserLoginRespDTO result =userService.login(requestParam);
+        return Results.success(result);
     }
 }
