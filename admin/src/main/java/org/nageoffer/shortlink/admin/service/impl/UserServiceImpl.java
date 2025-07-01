@@ -13,8 +13,12 @@ import org.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 import org.nageoffer.shortlink.admin.service.UserService;
 import org.redisson.api.RBloomFilter;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import static org.nageoffer.shortlink.admin.common.constant.RedisCacheConstant.LOCK_USER_REGISTER;
 
 /**
  * 用户接口层实现
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
+    private final RedissonClient redissonClient;
     @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
@@ -57,11 +62,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         if (hasUsername(requestParam.getUsername())){
             throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
         }
-        int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
+        RLock lock = redissonClient.getLock(LOCK_USER_REGISTER + requestParam.getUsername());
+        try{
+            if (lock.tryLock()){
+                int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
 
-        if (inserted < 1) {
-            throw new ClientException(UserErrorCodeEnum.USER_SAVE_ERROR);
+                if (inserted < 1) {
+                    throw new ClientException(UserErrorCodeEnum.USER_SAVE_ERROR);
+                }
+                userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+                return;
+            }
+            throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
+
+        }finally {
+            lock.unlock();
         }
-        userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
     }
 }
