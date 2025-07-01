@@ -3,6 +3,7 @@ package org.nageoffer.shortlink.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.nageoffer.shortlink.admin.dao.entity.UserDO;
 import org.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
+import org.nageoffer.shortlink.admin.dto.req.UserUpdateReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 
 /**
@@ -28,4 +29,10 @@ public interface UserService extends IService<UserDO> {
      * @param requestParam 用户注册请求数据传输对象
      */
     void registerUser(UserRegisterReqDTO requestParam);
+
+    /**
+     * 根据用户名修改用户信息
+     * @param requestParam
+     */
+    void update(UserUpdateReqDTO requestParam);
 }

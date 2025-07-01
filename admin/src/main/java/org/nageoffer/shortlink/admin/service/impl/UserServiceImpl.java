@@ -2,6 +2,7 @@ package org.nageoffer.shortlink.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.nageoffer.shortlink.admin.common.enums.UserErrorCodeEnum;
 import org.nageoffer.shortlink.admin.dao.entity.UserDO;
 import org.nageoffer.shortlink.admin.dao.mapper.UserMapper;
 import org.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
+import org.nageoffer.shortlink.admin.dto.req.UserUpdateReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 import org.nageoffer.shortlink.admin.service.UserService;
 import org.redisson.api.RBloomFilter;
@@ -29,6 +31,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     private final RedissonClient redissonClient;
+
     @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, username);
@@ -59,12 +62,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public void registerUser(UserRegisterReqDTO requestParam) {
-        if (hasUsername(requestParam.getUsername())){
+        if (hasUsername(requestParam.getUsername())) {
             throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
         }
         RLock lock = redissonClient.getLock(LOCK_USER_REGISTER + requestParam.getUsername());
-        try{
-            if (lock.tryLock()){
+        try {
+            if (lock.tryLock()) {
                 int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
 
                 if (inserted < 1) {
@@ -75,8 +78,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             }
             throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
 
-        }finally {
+        } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public void update(UserUpdateReqDTO requestParam) {
+        // TODO: 这里需要添加权限校验，确保当前用户有权限修改该用户信息 c
+        LambdaUpdateWrapper<UserDO> updateWrapper = Wrappers.lambdaUpdate(UserDO.class)
+                .eq(UserDO::getUsername, requestParam.getUsername());
+        baseMapper.update(BeanUtil.toBean(requestParam, UserDO.class), updateWrapper);
     }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
 import org.nageoffer.shortlink.admin.dto.req.UserRegisterReqDTO;
+import org.nageoffer.shortlink.admin.dto.req.UserUpdateReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserActualRespDTO;
 import org.nageoffer.shortlink.admin.dto.resq.UserRespDTO;
 import org.nageoffer.shortlink.admin.service.UserService;
@@ -57,6 +58,17 @@ public class UserController {
     @PostMapping("/api/short-link/v1/user")
     public Result<Void> register(@RequestBody UserRegisterReqDTO requestParam) {
         userService.registerUser(requestParam);
+        return Results.success();
+    }
+
+    /**
+     * 根据用户名修改用户信息
+     * @param requestParam
+     * @return
+     */
+    @PutMapping("/api/short-link/v1/user")
+    public Result<Void> update(@RequestBody UserUpdateReqDTO requestParam) {
+        userService.update(requestParam);
         return Results.success();
     }
 }
