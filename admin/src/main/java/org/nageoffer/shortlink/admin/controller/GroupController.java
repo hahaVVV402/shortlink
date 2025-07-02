@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
 import org.nageoffer.shortlink.admin.dto.req.ShortLinkGroupSaveReqDTO;
+import org.nageoffer.shortlink.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.nageoffer.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.ShortLinkGroupRespDTO;
 import org.nageoffer.shortlink.admin.service.GroupService;
@@ -62,4 +63,16 @@ public class GroupController {
         groupService.deleteGroup(gid);
         return Results.success();
     }
+
+    /**
+     * 分组排序
+     * @param requestParam
+     * @return
+     */
+    @PostMapping("/api/short-link/admin/v1/group/sort")
+    public Result<Void> sortGroup(@RequestBody List<ShortLinkGroupSortReqDTO> requestParam) {
+        groupService.sortGroup(requestParam);
+        return Results.success();
+    }
+
 }
