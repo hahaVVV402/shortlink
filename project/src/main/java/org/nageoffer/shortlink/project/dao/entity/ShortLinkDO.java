@@ -2,6 +2,7 @@ package org.nageoffer.shortlink.project.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
 import lombok.Data;
 import org.nageoffer.shortlink.project.common.database.BaseDO;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  * 短链接实体类
  */
 @Data
+@Builder
 @TableName("t_link")
 public class ShortLinkDO extends BaseDO {
     /**
