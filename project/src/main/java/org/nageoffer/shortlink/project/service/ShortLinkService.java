@@ -1,9 +1,12 @@
 package org.nageoffer.shortlink.project.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.nageoffer.shortlink.project.dao.entity.ShortLinkDO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkCreateReqDTO;
+import org.nageoffer.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkCreateRespDTO;
+import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
 
 /**
  * 短链接服务接口
@@ -16,4 +19,6 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @return 短链接创建响应结果
      */
     ShortLinkCreateRespDTO createShortLink(ShortLinkCreateReqDTO requestParam);
+
+    IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO requestParam);
 }
