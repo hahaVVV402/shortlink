@@ -8,9 +8,11 @@ import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkCreateRespDTO;
+import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +45,20 @@ public interface ShorLinkRemoteService {
         requestMap.put("current", requestParam.getCurrent());
         requestMap.put("size", requestParam.getSize());
         String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/page", requestMap);
+        return JSON.parseObject(resultPageStr, new TypeReference<>() {
+        });
+    }
+
+
+    /**
+     * 统计分组下短链接数量
+     * @param requestParam
+     * @return
+     */
+    default Result<List<ShortLinkGroupCountQueryRespDTO>> listGroupShortLinkCount(List<String> requestParam){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("requestParam", requestParam);
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/count", requestMap);
         return JSON.parseObject(resultPageStr, new TypeReference<>() {
         });
     }
