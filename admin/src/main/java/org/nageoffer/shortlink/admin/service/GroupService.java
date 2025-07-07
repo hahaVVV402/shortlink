@@ -13,7 +13,18 @@ import java.util.List;
  */
 public interface GroupService extends IService<GroupDO> {
 
+    /**
+     * 新增短链接分组
+     * @param groupName
+     */
     void saveGroup(String groupName);
+
+    /**
+     * 新增短链接分组
+     * @param userName
+     * @param groupName
+     */
+    void saveGroup(String userName, String groupName);
 
     List<ShortLinkGroupRespDTO> listGroup();
 
