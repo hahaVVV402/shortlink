@@ -19,7 +19,7 @@ public class ShortLinkUpdateReqDTO {
     /**
      * 完整短链接
      */
-    private String fullShortUrl
+    private String fullShortUrl;
 
     /**
      * 分组标识
