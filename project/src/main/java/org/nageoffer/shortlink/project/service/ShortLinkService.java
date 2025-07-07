@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.nageoffer.shortlink.project.dao.entity.ShortLinkDO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkPageReqDTO;
+import org.nageoffer.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkCreateRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
@@ -31,4 +32,6 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @return
      */
     List<ShortLinkGroupCountQueryRespDTO> countShortLinkByGroup(List<String> requestParam);
+
+    void updateShortLink(ShortLinkUpdateReqDTO requestParam);
 }
