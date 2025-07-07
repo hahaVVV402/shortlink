@@ -38,9 +38,12 @@ public class ShortLinkController {
      * 修改短链接
      * @param requestParam
      * @return
+     *
+     *
+     *     "describe": "incididunt culpa tempor aliqua"
      */
-    @PutMapping("/api/short-link/v1/update")
-public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam) {
+    @PostMapping("/api/short-link/v1/update")
+    public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam) {
         shortLinkService.updateShortLink(requestParam);
         return Results.success();
     }

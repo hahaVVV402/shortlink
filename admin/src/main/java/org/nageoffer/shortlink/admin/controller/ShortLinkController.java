@@ -45,12 +45,11 @@ public class ShortLinkController {
         return shortLinkRemoteService.pageShortLink(requestParam);
     }
 
+
     /**
      * 修改短链接
-     * @param requestParam
-     * @return
      */
-    @PutMapping("/api/short-link/v1/update")
+    @PostMapping("/api/short-link/admin/v1/update")
     public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam) {
         shortLinkRemoteService.updateShortLink(requestParam);
         return Results.success();
