@@ -11,6 +11,7 @@ import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkCreateRespDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -72,4 +73,11 @@ public interface ShorLinkRemoteService {
     default void updateShortLink(ShortLinkUpdateReqDTO requestParam){
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/update", JSON.toJSONString(requestParam));
     };
+
+    default Result<String> getTitleByUrl(@RequestParam("url") String url){
+        String resultStr = HttpUtil.get("http://127.0.0.1:8001/api/shor-link/v1/title?url=" + url);
+        return JSON.parseObject(resultStr, new TypeReference<>() {
+        });
+
+    }
 }
