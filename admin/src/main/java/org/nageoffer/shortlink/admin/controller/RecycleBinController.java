@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
 import org.nageoffer.shortlink.admin.remote.ShorLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinRecoverReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinSaveReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkRecyclePageReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
@@ -44,5 +45,16 @@ public class RecycleBinController {
     @GetMapping("/api/short-link/admin/v1/recycle-bin/page")
     public Result<IPage<ShortLinkPageRespDTO>>  pageShortLink(ShortLinkRecyclePageReqDTO requestParam) {
         return recycleBinService.pageRecycleBinShortLink(requestParam);
+    }
+
+    /**
+     * 恢复短链接
+     * @param requestParam
+     * @return
+     */
+    @PostMapping("/api/short-link/admin/v1/recycle-bin/recover")
+    public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReqDTO requestParam) {
+        shortLinkRemoteService.recoverRecoverBin(requestParam);
+        return Results.success();
     }
 }

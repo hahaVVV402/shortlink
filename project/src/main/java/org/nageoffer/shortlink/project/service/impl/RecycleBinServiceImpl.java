@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.project.dao.entity.ShortLinkDO;
 import org.nageoffer.shortlink.project.dao.mapper.ShortLinkMapper;
+import org.nageoffer.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinSaveReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkRecyclePageReqDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
@@ -16,6 +17,7 @@ import org.nageoffer.shortlink.project.service.RecycleBinService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import static org.nageoffer.shortlink.project.common.constant.RedisKeyConstant.GOTO_IS_NULL_SHORT_LINK_KEY;
 import static org.nageoffer.shortlink.project.common.constant.RedisKeyConstant.GOTO_SHORT_LINK_KEY;
 
 @Service
@@ -53,5 +55,19 @@ public class RecycleBinServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLin
             result.setDomain("http://" + each.getDomain());
             return result;
         });
+    }
+
+    @Override
+    public void recoverRecoverBin(RecycleBinRecoverReqDTO requestParam) {
+        LambdaUpdateWrapper<ShortLinkDO> updateWrapper = Wrappers.lambdaUpdate(ShortLinkDO.class)
+                .eq(ShortLinkDO::getFullShortUrl, requestParam.getFullShortUrl())
+                .eq(ShortLinkDO::getGid, requestParam.getGid())
+                .eq(ShortLinkDO::getEnableStatus, 1)
+                .eq(ShortLinkDO::getDelFlag, 0);
+        ShortLinkDO shortLinkDO = ShortLinkDO.builder()
+                .enableStatus(0) // 设置为正常状态
+                .build();
+        baseMapper.update(shortLinkDO, updateWrapper);
+        stringRedisTemplate.delete(String.format(GOTO_IS_NULL_SHORT_LINK_KEY, requestParam.getFullShortUrl()));
     }
 }
