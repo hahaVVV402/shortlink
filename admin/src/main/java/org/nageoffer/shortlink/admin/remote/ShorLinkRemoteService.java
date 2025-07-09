@@ -5,12 +5,14 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
+import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinSaveReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkCreateRespDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -74,10 +76,24 @@ public interface ShorLinkRemoteService {
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/update", JSON.toJSONString(requestParam));
     };
 
+    /**
+     * 根据 URL 获取标题
+     * @param url
+     * @return
+     */
     default Result<String> getTitleByUrl(@RequestParam("url") String url){
         String resultStr = HttpUtil.get("http://127.0.0.1:8001/api/shor-link/v1/title?url=" + url);
         return JSON.parseObject(resultStr, new TypeReference<>() {
         });
 
     }
+
+    /**
+     * 保存回收站数据
+     *
+     * @param requestParam 回收站保存请求参数
+     */
+    default void saveRecycleBin(@RequestBody RecycleBinSaveReqDTO requestParam){
+        HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/save", JSON.toJSONString(requestParam));
+    };
 }
