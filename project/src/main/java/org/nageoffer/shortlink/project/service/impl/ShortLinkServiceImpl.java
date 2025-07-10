@@ -31,14 +31,8 @@ import org.jsoup.nodes.Element;
 import org.nageoffer.shortlink.project.common.convention.exception.ClientException;
 import org.nageoffer.shortlink.project.common.convention.exception.ServiceException;
 import org.nageoffer.shortlink.project.common.enums.VailDateTypeEnum;
-import org.nageoffer.shortlink.project.dao.entity.LinkAccessStatsDO;
-import org.nageoffer.shortlink.project.dao.entity.LinkLocaleStatsDO;
-import org.nageoffer.shortlink.project.dao.entity.ShortLinkDO;
-import org.nageoffer.shortlink.project.dao.entity.ShortLinkGotoDO;
-import org.nageoffer.shortlink.project.dao.mapper.LinkAccessStatsMapper;
-import org.nageoffer.shortlink.project.dao.mapper.LinkLocaleStatsMapper;
-import org.nageoffer.shortlink.project.dao.mapper.ShortLinkGotoMapper;
-import org.nageoffer.shortlink.project.dao.mapper.ShortLinkMapper;
+import org.nageoffer.shortlink.project.dao.entity.*;
+import org.nageoffer.shortlink.project.dao.mapper.*;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
@@ -80,6 +74,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final RedissonClient redissonClient;
     private final LinkAccessStatsMapper linkAccessStatsMapper;
     private final LinkLocaleStatsMapper linkLocaleStatsMapper;
+    private final LinkOsStatsMapper linkOsStatsMapper;
 
     @Value("${short-link.stats.locale.amap-key}")
     private String statsLocalAmapKey;
@@ -363,6 +358,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .date(new Date())
                         .build();
                 linkLocaleStatsMapper.shortLinkLocaleState(linkLocaleStatsDO);
+                LinkOsStatsDO linkOsStatsDO = LinkOsStatsDO.builder()
+                        .fullShortUrl(fullShortUrl)
+                        .os(LinkUtil.getOs(((HttpServletRequest) request)))
+                        .cnt(1)
+                        .gid(gid)
+                        .date(new Date())
+                        .build();
+                linkOsStatsMapper.shortLinkOsState(linkOsStatsDO);
             }
         } catch (Throwable ex) {
             log.error("记录短链接访问统计数据失败，fullShortUrl: {}, gid: {}, error: {}", fullShortUrl, gid, ex.getMessage(), ex);
