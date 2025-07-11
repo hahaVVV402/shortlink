@@ -75,6 +75,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final LinkAccessStatsMapper linkAccessStatsMapper;
     private final LinkLocaleStatsMapper linkLocaleStatsMapper;
     private final LinkOsStatsMapper linkOsStatsMapper;
+    private final LinkBrowserStatsMapper LinkBrowserStatsMapper;
 
     @Value("${short-link.stats.locale.amap-key}")
     private String statsLocalAmapKey;
@@ -366,6 +367,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .date(new Date())
                         .build();
                 linkOsStatsMapper.shortLinkOsState(linkOsStatsDO);
+                LinkBrowserStatsDO linkBrowserStatsDO = LinkBrowserStatsDO.builder()
+                        .fullShortUrl(fullShortUrl)
+                        .browser(LinkUtil.getBrowser(((HttpServletRequest) request)))
+                        .cnt(1)
+                        .gid(gid)
+                        .date(new Date())
+                        .build();
+                LinkBrowserStatsMapper.shortLinkBrowserState(linkBrowserStatsDO);
             }
         } catch (Throwable ex) {
             log.error("记录短链接访问统计数据失败，fullShortUrl: {}, gid: {}, error: {}", fullShortUrl, gid, ex.getMessage(), ex);
