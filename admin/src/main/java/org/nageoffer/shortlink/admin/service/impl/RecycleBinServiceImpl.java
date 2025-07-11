@@ -10,7 +10,7 @@ import org.nageoffer.shortlink.admin.common.convention.exception.ServiceExceptio
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.dao.entity.GroupDO;
 import org.nageoffer.shortlink.admin.dao.mapper.GroupMapper;
-import org.nageoffer.shortlink.admin.remote.ShorLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkRecyclePageReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
 import org.nageoffer.shortlink.admin.service.RecycleBinService;
@@ -29,7 +29,7 @@ public class RecycleBinServiceImpl implements RecycleBinService {
     /**
      * 后续重构为 SpringCloud Feign 调用
      */
-    ShorLinkRemoteService shortLinkRemoteService = new ShorLinkRemoteService() {
+    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
     };
 
     @Override

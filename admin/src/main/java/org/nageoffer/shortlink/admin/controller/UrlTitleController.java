@@ -2,7 +2,7 @@ package org.nageoffer.shortlink.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
-import org.nageoffer.shortlink.admin.remote.ShorLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UrlTitleController {
 
-    ShorLinkRemoteService shortLinkRemoteService = new ShorLinkRemoteService() {
+    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
     };
 
     /**

@@ -4,13 +4,16 @@ package org.nageoffer.shortlink.admin.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
-import org.nageoffer.shortlink.admin.remote.ShorLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkCreateRespDTO;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 短链接后管控制层
@@ -21,7 +24,7 @@ public class ShortLinkController {
     /**
      * 后续重构为SpringCloud Feign 调用
      */
-    ShorLinkRemoteService shortLinkRemoteService = new ShorLinkRemoteService() {
+    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
     };
 
     /**

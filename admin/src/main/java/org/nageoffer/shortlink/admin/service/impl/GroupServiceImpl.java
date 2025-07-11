@@ -13,7 +13,7 @@ import org.nageoffer.shortlink.admin.dao.mapper.GroupMapper;
 import org.nageoffer.shortlink.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.nageoffer.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.nageoffer.shortlink.admin.dto.resq.ShortLinkGroupRespDTO;
-import org.nageoffer.shortlink.admin.remote.ShorLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.admin.service.GroupService;
 import org.nageoffer.shortlink.admin.toolkit.RandomGenerator;
@@ -33,7 +33,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
     /**
      * 后续重构为SpringCloud Feign 调用
      */
-    ShorLinkRemoteService shortLinkRemoteService = new ShorLinkRemoteService() {
+    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
     };
 
     @Override

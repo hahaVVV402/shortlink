@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
-import org.nageoffer.shortlink.admin.remote.ShorLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinRecoverReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinRemoveReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinSaveReqDTO;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecycleBinController {
     private final RecycleBinService recycleBinService;
 
-    ShorLinkRemoteService shortLinkRemoteService = new ShorLinkRemoteService() {
+    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
     };
     /**
      * 保存回收站数据
