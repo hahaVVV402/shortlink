@@ -6,10 +6,7 @@ import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.remote.dto.req.*;
-import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkCreateRespDTO;
-import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryRespDTO;
-import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkPageRespDTO;
-import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkStatsRespDTO;
+import org.nageoffer.shortlink.admin.remote.dto.resq.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -123,6 +120,11 @@ public interface ShortLinkRemoteService {
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/remove", JSON.toJSONString(requestParam));
     };
 
+    /**
+     * 访问分组短链接指定时间内监控数据
+     * @param requestParam
+     * @return
+     */
     default Result<ShortLinkStatsRespDTO> oneShortLinkStats(ShortLinkStatsReqDTO requestParam){
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("fullShortUrl", requestParam.getFullShortUrl());
@@ -133,4 +135,22 @@ public interface ShortLinkRemoteService {
         return JSON.parseObject(resultPageStr, new TypeReference<>() {
         });
     }
+
+    /**
+     * 访问分组短链接指定时间内监控数据
+     * @param requestParam
+     * @return
+     */
+    default Result<IPage<ShortLinkStatsAccessRecordRespDTO>> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("fullShortUrl", requestParam.getFullShortUrl());
+        requestMap.put("gid", requestParam.getGid());
+        requestMap.put("startDate", requestParam.getStartDate());
+        requestMap.put("endDate", requestParam.getEndDate());
+        requestMap.put("current", requestParam.getCurrent());
+        requestMap.put("size", requestParam.getSize());
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats/access-record", requestMap);
+        return JSON.parseObject(resultPageStr, new TypeReference<>() {
+        });
+    };
 }
