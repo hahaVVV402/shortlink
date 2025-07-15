@@ -16,4 +16,8 @@ public class ShortLinkRecyclePageReqDTO extends Page {
      */
     private List<String> gidList;
 
+    /**
+     * 排序标识
+     */
+    private  String orderTag;
 }
