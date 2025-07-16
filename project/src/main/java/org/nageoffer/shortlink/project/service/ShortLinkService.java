@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import org.nageoffer.shortlink.project.dao.entity.ShortLinkDO;
+import org.nageoffer.shortlink.project.dto.req.ShortLinkBatchCreateReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
+import org.nageoffer.shortlink.project.dto.resq.ShortLinkBatchCreateRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkCreateRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
@@ -54,4 +56,12 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @param response
      */
     void restoreUrl(String shortUri, ServletRequest request, ServletResponse response);
+
+    /**
+     * 批量创建短链接
+     *
+     * @param requestParam 批量创建短链接请求参数
+     * @return 批量创建短链接返回参数
+     */
+    ShortLinkBatchCreateRespDTO batchCreateShortLink(ShortLinkBatchCreateReqDTO requestParam);
 }

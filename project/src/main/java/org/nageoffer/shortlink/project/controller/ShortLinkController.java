@@ -6,9 +6,11 @@ import jakarta.servlet.ServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.project.common.convention.result.Result;
 import org.nageoffer.shortlink.project.common.convention.result.Results;
+import org.nageoffer.shortlink.project.dto.req.ShortLinkBatchCreateReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.nageoffer.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
+import org.nageoffer.shortlink.project.dto.resq.ShortLinkBatchCreateRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkCreateRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
@@ -73,6 +75,14 @@ public class ShortLinkController {
     public Result<List<ShortLinkGroupCountQueryRespDTO>> listGroupShortLinkCount(@RequestParam List<String> requestParam) {
         List<ShortLinkGroupCountQueryRespDTO> list = shortLinkService.countShortLinkByGroup(requestParam);
         return Results.success(list);
+    }
+
+    /**
+     * 批量创建短链接
+     */
+    @PostMapping("/api/short-link/v1/create/batch")
+    public Result<ShortLinkBatchCreateRespDTO> batchCreateShortLink(@RequestBody ShortLinkBatchCreateReqDTO requestParam) {
+        return Results.success(shortLinkService.batchCreateShortLink(requestParam));
     }
 
 }
