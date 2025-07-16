@@ -28,6 +28,8 @@ mybatis-plus:
 
 
 short-link:
+  domain:
+    default: nurl.ink:8001
   stats:
     locale:
       amap-key: 244eeb5aaed8ee933cb81c760aa7938f
