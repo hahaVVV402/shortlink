@@ -1,12 +1,15 @@
 package org.nageoffer.shortlink.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nageoffer.shortlink.admin.common.biz.user.UserContext;
+import org.nageoffer.shortlink.admin.common.convention.exception.ClientException;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.dao.entity.GroupDO;
 import org.nageoffer.shortlink.admin.dao.mapper.GroupMapper;
@@ -17,18 +20,29 @@ import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
 import org.nageoffer.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryRespDTO;
 import org.nageoffer.shortlink.admin.service.GroupService;
 import org.nageoffer.shortlink.admin.toolkit.RandomGenerator;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.nageoffer.shortlink.admin.common.constant.RedisCacheConstant.LOCK_GROUP_CREATE_KEY;
+
 /**
  * 分组接口层实现
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implements GroupService {
+
+    private final RedissonClient redissonClient;
+
+    @Value("${short-link.group.max_num}")
+    private Integer groupMaxNum;
 
     /**
      * 后续重构为SpringCloud Feign 调用
@@ -43,20 +57,33 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
 
     @Override
     public void saveGroup(String userName, String groupName) {
-        String gid;
-        do {
-            gid = RandomGenerator.generateRandom();
-        }while (!hasGid(userName, gid));
-        GroupDO groupDO = GroupDO.builder()
-                .gid(gid)
-                .sortOrder(0)
-                .username(userName)
-                .name(groupName)
-                .build();
-        baseMapper.insert(groupDO);
+        RLock lock = redissonClient.getLock(String.format(LOCK_GROUP_CREATE_KEY, userName));
+        lock.lock();
+        try {
+            LambdaQueryWrapper<GroupDO> queryWrapper = Wrappers.lambdaQuery(GroupDO.class)
+                    .eq(GroupDO::getUsername, userName)
+                    .eq(GroupDO::getDelFlag, 0);
+            List<GroupDO> groupDOList = baseMapper.selectList(queryWrapper);
+            if (CollUtil.isNotEmpty(groupDOList) && groupDOList.size() == groupMaxNum) {
+                throw new ClientException(String.format("已超出最大分组数：%d",groupMaxNum));
+            }
+            String gid;
+            do {
+                gid = RandomGenerator.generateRandom();
+            } while (!hasGid(userName, gid));
+            GroupDO groupDO = GroupDO.builder()
+                    .gid(gid)
+                    .sortOrder(0)
+                    .username(userName)
+                    .name(groupName)
+                    .build();
+            baseMapper.insert(groupDO);
+        } finally {
+            lock.unlock();
+        }
     }
 
-    private boolean hasGid(String username, String gid){
+    private boolean hasGid(String username, String gid) {
         LambdaQueryWrapper<GroupDO> queryWrapper = Wrappers.lambdaQuery(GroupDO.class)
                 .eq(GroupDO::getGid, gid)
                 .eq(GroupDO::getUsername, Optional.ofNullable(username).orElse(UserContext.getUsername()));
@@ -117,7 +144,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
                     .eq(GroupDO::getGid, each.getGid())
                     .eq(GroupDO::getDelFlag, 0);
 
-            baseMapper.update(groupDO,updateWrapper);
+            baseMapper.update(groupDO, updateWrapper);
         });
     }
 }

@@ -15,6 +15,6 @@ public class RedisCacheConstant {
     /**
      * 分组创建分布式锁
      */
-    public static final String LOCK_GROUP_CREATE_KEY = "short-link:lock_group-creat:";
+    public static final String LOCK_GROUP_CREATE_KEY = "short-link:lock_group-creat:%s";
 
 }
