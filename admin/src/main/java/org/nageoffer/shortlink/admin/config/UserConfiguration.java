@@ -1,6 +1,8 @@
 package org.nageoffer.shortlink.admin.config;
 
+import org.nageoffer.shortlink.admin.common.biz.user.UserFlowRiskControlFilter;
 import org.nageoffer.shortlink.admin.common.biz.user.UserTransmitFilter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,21 @@ public class UserConfiguration {
         registration.addUrlPatterns("/*");
         registration.addInitParameter("exclusions", "/api/short-link/admin/v1/user/login,/api/short-link/admin/v1/user/register");
         registration.setOrder(0);
+        return registration;
+    }
+
+    /**
+     * 用户操作流量风控过滤器
+     */
+    @Bean
+    @ConditionalOnProperty(name = "short-link.flow-limit.enable", havingValue = "true")
+    public FilterRegistrationBean<UserFlowRiskControlFilter> globalUserFlowRiskControlFilter(
+            StringRedisTemplate stringRedisTemplate,
+            UserFlowRiskControlConfiguration userFlowRiskControlConfiguration) {
+        FilterRegistrationBean<UserFlowRiskControlFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new UserFlowRiskControlFilter(stringRedisTemplate, userFlowRiskControlConfiguration));
+        registration.addUrlPatterns("/*");
+        registration.setOrder(10);
         return registration;
     }
 }
