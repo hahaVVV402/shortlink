@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
 import org.nageoffer.shortlink.admin.common.convention.result.Results;
-import org.nageoffer.shortlink.admin.remote.ShortLinkRemoteService;
+import org.nageoffer.shortlink.admin.remote.ShortLinkActualRemoteService;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinRecoverReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinRemoveReqDTO;
 import org.nageoffer.shortlink.admin.remote.dto.req.RecycleBinSaveReqDTO;
@@ -23,9 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RecycleBinController {
     private final RecycleBinService recycleBinService;
+    private final ShortLinkActualRemoteService shortLinkActualRemoteService;
 
-    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
-    };
     /**
      * 保存回收站数据
      *
@@ -34,7 +33,7 @@ public class RecycleBinController {
      */
     @PostMapping("/api/short-link/admin/v1/recycle-bin/save")
     public Result<Void> saveRecycleBin(@RequestBody RecycleBinSaveReqDTO requestParam){
-        shortLinkRemoteService.saveRecycleBin(requestParam);
+        shortLinkActualRemoteService.saveRecycleBin(requestParam);
         return Results.success();
     }
 
@@ -55,7 +54,7 @@ public class RecycleBinController {
      */
     @PostMapping("/api/short-link/admin/v1/recycle-bin/recover")
     public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReqDTO requestParam) {
-        shortLinkRemoteService.recoverRecoverBin(requestParam);
+        shortLinkActualRemoteService.recoverRecoverBin(requestParam);
         return Results.success();
     }
 
@@ -66,7 +65,7 @@ public class RecycleBinController {
      */
     @PostMapping("/api/short-link/admin/v1/recycle-bin/remove")
     public Result<Void> removeRecycleBin(@RequestBody RecycleBinRemoveReqDTO requestParam) {
-        shortLinkRemoteService.removeRecycleBin(requestParam);
+        shortLinkActualRemoteService.removeRecycleBin(requestParam);
         return Results.success();
     }
 }
