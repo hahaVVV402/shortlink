@@ -25,6 +25,7 @@ public interface ShortLinkActualRemoteService {
      */
     @PostMapping("/api/short-link/v1/create")
     Result<ShortLinkCreateRespDTO> createShortLink(@RequestBody  ShortLinkCreateReqDTO requestParam);
+
     /**
      * 批量创建短链接
      *
