@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * URL回收站实现层
  */
-@Service
+@Service(value = "recycleBinServiceByAdmin")
 @RequiredArgsConstructor
-public class RecycleBinServiceImpl implements RecycleBinService {
+public class RecycleBinAdminServiceImpl implements RecycleBinService {
     private final ShortLinkActualRemoteService shortLinkActualRemoteService;
     private final GroupMapper groupMapper;
 
