@@ -17,6 +17,7 @@ import static org.nageoffer.shortlink.project.common.constant.RedisKeyConstant.D
  */
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class DelayShortLinkStatsProducer {
 
     private final RedissonClient redissonClient;
