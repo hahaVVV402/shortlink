@@ -10,8 +10,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication(scanBasePackages = {
         "org.nageoffer.shortlink.project",
-        "org.nageoffer.shortlink.admin",
-        "org.nageoffer.shortlink.aggregation"
+        "org.nageoffer.shortlink.admin"
 })
 @EnableDiscoveryClient
 @MapperScan(value = {
