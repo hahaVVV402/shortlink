@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.LockSupport;
 
 import static org.nageoffer.shortlink.project.common.constant.RedisKeyConstant.DELAY_QUEUE_STATS_KEY;
+@Deprecated
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class DelayShortLinkStatsConsumer implements InitializingBean {
                             if (statsRecord != null) {
                                 if (messageQueueIdempotentHandler.isMessageProcessed(statsRecord.getKeys())) {
                                     // 判断当前的这个消息是否执行完成
-                                    if (messageQueueIdempotentHandler.isMessageAccomplish(statsRecord.getKeys())){
+                                    if (messageQueueIdempotentHandler.isAccomplish(statsRecord.getKeys())){
                                         return;
                                     }
                                     throw new ServiceException("消息未完成流程，需要消息队列重试");
@@ -53,7 +54,7 @@ public class DelayShortLinkStatsConsumer implements InitializingBean {
                                     messageQueueIdempotentHandler.delMessageProcessed(statsRecord.getKeys());
                                     log.error("延迟记录短链接监控消费异常",ex);
                                 }
-                                messageQueueIdempotentHandler.setMessageAccomplish(statsRecord.getKeys());
+                                messageQueueIdempotentHandler.setAccomplish(statsRecord.getKeys());
                                 continue;
                             }
                             LockSupport.parkUntil(500);
