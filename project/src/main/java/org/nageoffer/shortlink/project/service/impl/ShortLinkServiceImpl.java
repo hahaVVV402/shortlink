@@ -211,11 +211,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .eq(ShortLinkDO::getDelFlag, 0)
                         .eq(ShortLinkDO::getDelTime, 0L)
                         .eq(ShortLinkDO::getEnableStatus, 0);
-                ShortLinkDO delShortLinkDO = ShortLinkDO.builder()
-                        .delTime(System.currentTimeMillis())
-                        .build();
-                delShortLinkDO.setDelFlag(1);
-                baseMapper.update(delShortLinkDO, linkUpdateWrapper);
+//                ShortLinkDO delShortLinkDO = ShortLinkDO.builder()
+//                        .delTime(System.currentTimeMillis())
+//                        .build();
+//                delShortLinkDO.setDelFlag(1);
+//                baseMapper.update(delShortLinkDO, linkUpdateWrapper);
+                linkUpdateWrapper.set(ShortLinkDO::getDelFlag, 1)
+                        .set(ShortLinkDO::getDelTime, System.currentTimeMillis());
+                baseMapper.update(null, linkUpdateWrapper);
                 ShortLinkDO shortLinkDO = ShortLinkDO.builder()
                         .domain(createShortLinkDefaultDomain)
                         .originUrl(requestParam.getOriginUrl())
