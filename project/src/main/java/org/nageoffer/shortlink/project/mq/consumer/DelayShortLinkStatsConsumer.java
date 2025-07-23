@@ -19,6 +19,7 @@ import static org.nageoffer.shortlink.project.common.constant.RedisKeyConstant.D
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class DelayShortLinkStatsConsumer implements InitializingBean {
 
     private final RedissonClient redissonClient;
