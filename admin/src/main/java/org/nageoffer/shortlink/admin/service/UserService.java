@@ -30,7 +30,7 @@ public interface UserService extends IService<UserDO> {
      * 注册用户
      * @param requestParam 用户注册请求数据传输对象
      */
-    void registerUser(UserRegisterReqDTO requestParam);
+    void register(UserRegisterReqDTO requestParam);
 
     /**
      * 根据用户名修改用户信息

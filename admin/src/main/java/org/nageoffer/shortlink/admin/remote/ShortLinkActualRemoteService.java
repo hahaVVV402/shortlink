@@ -2,6 +2,7 @@ package org.nageoffer.shortlink.admin.remote;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.nageoffer.shortlink.admin.common.convention.result.Result;
+import org.nageoffer.shortlink.admin.config.OpenFeignConfiguration;
 import org.nageoffer.shortlink.admin.remote.dto.req.*;
 import org.nageoffer.shortlink.admin.remote.dto.resq.*;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,7 +16,11 @@ import java.util.List;
 /**
  * 短链接中台远程调用服务
  */
-@FeignClient(value = "short-link-project", url = "${aggregation.remote-url:}")
+@FeignClient(
+        value = "short-link-project",
+        url = "${aggregation.remote-url:}",
+        configuration = OpenFeignConfiguration.class
+)
 public interface ShortLinkActualRemoteService {
     /**
      * 创建短链接
