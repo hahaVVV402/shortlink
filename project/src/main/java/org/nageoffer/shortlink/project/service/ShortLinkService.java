@@ -24,48 +24,19 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
 
     /**
      * 创建短链接
-     * @param requestParam 短链接创建请求参数
-     * @return 短链接创建响应结果
+     *
+     * @param requestParam 创建短链接请求参数
+     * @return 短链接创建信息
      */
     ShortLinkCreateRespDTO createShortLink(ShortLinkCreateReqDTO requestParam);
 
     /**
-     * 分页查询短链接
-     * @param requestParam
-     * @return
-     */
-
-    IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO requestParam);
-
-    /**
-     * 统计分组下短链接数量
-     * @param requestParam
-     * @return
-     */
-    List<ShortLinkGroupCountQueryRespDTO> countShortLinkByGroup(List<String> requestParam);
-
-    /**
-     * 修改短链接
-     * @param requestParam
-     */
-
-    /**
-     * 查询短链接分组内数量
+     * 根据分布式锁创建短链接
      *
-     * @param requestParam 查询短链接分组内数量请求参数
-     * @return 查询短链接分组内数量响应
+     * @param requestParam 创建短链接请求参数
+     * @return 短链接创建信息
      */
-    List<ShortLinkGroupCountQueryRespDTO> listGroupShortLinkCount(List<String> requestParam);
-
-    void updateShortLink(ShortLinkUpdateReqDTO requestParam);
-
-    /**
-     * 还原短跳转
-     * @param shortUri
-     * @param request
-     * @param response
-     */
-    void restoreUrl(String shortUri, ServletRequest request, ServletResponse response);
+    ShortLinkCreateRespDTO createShortLinkByLock(ShortLinkCreateReqDTO requestParam);
 
     /**
      * 批量创建短链接
@@ -76,6 +47,38 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
     ShortLinkBatchCreateRespDTO batchCreateShortLink(ShortLinkBatchCreateReqDTO requestParam);
 
     /**
+     * 修改短链接
+     *
+     * @param requestParam 修改短链接请求参数
+     */
+    void updateShortLink(ShortLinkUpdateReqDTO requestParam);
+
+    /**
+     * 分页查询短链接
+     *
+     * @param requestParam 分页查询短链接请求参数
+     * @return 短链接分页返回结果
+     */
+    IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO requestParam);
+
+    /**
+     * 查询短链接分组内数量
+     *
+     * @param requestParam 查询短链接分组内数量请求参数
+     * @return 查询短链接分组内数量响应
+     */
+    List<ShortLinkGroupCountQueryRespDTO> listGroupShortLinkCount(List<String> requestParam);
+
+    /**
+     * 短链接跳转
+     *
+     * @param shortUri 短链接后缀
+     * @param request  HTTP 请求
+     * @param response HTTP 响应
+     */
+    void restoreUrl(String shortUri, ServletRequest request, ServletResponse response);
+
+    /**
      * 短链接统计
      *
      * @param fullShortUrl         完整短链接
@@ -84,5 +87,4 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      */
     void shortLinkStats(String fullShortUrl, String gid, ShortLinkStatsRecordDTO shortLinkStatsRecord);
 
-    ShortLinkCreateRespDTO createShortLinkByLock(ShortLinkCreateReqDTO requestParam);
 }

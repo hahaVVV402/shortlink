@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * 短链接远程服务接口
  */
+@Deprecated
 public interface ShortLinkRemoteService {
 
     /**

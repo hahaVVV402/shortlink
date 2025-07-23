@@ -49,12 +49,10 @@ public class RecycleBinController {
 
     /**
      * 恢复短链接
-     * @param requestParam
-     * @return
      */
     @PostMapping("/api/short-link/admin/v1/recycle-bin/recover")
     public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReqDTO requestParam) {
-        shortLinkActualRemoteService.recoverRecoverBin(requestParam);
+        shortLinkActualRemoteService.recoverRecycleBin(requestParam);
         return Results.success();
     }
 

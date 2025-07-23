@@ -7,7 +7,7 @@ import org.nageoffer.shortlink.project.common.convention.result.Results;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinRemoveReqDTO;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinSaveReqDTO;
-import org.nageoffer.shortlink.project.dto.req.ShortLinkRecyclePageReqDTO;
+import org.nageoffer.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
 import org.nageoffer.shortlink.project.service.RecycleBinService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class RecycleBinController {
      * @return
      */
     @GetMapping("/api/short-link/v1/recycle-bin/page")
-    public Result<IPage<ShortLinkPageRespDTO>>  pageShortLink(ShortLinkRecyclePageReqDTO requestParam) {
+    public Result<IPage<ShortLinkPageRespDTO>>  pageShortLink(ShortLinkRecycleBinPageReqDTO requestParam) {
         IPage<ShortLinkPageRespDTO> page = recycleBinService.pageShortLink(requestParam);
         return Results.success(page);
     }

@@ -22,10 +22,6 @@ public class ShortLinkStatsController {
 
     private final ShortLinkActualRemoteService shortLinkActualRemoteService;
     /**
-     * 后续重构为 SpringCloud Feign 调用
-     */
-
-    /**
      * 访问单个短链接指定时间内监控数据
      */
     @GetMapping("/api/short-link/admin/v1/stats")
@@ -33,22 +29,10 @@ public class ShortLinkStatsController {
         return shortLinkActualRemoteService.oneShortLinkStats(
                 requestParam.getFullShortUrl(),
                 requestParam.getGid(),
+                requestParam.getEnableStatus(),
                 requestParam.getStartDate(),
-                requestParam.getEndDate());
-    }
-
-    /**
-     * 访问单个短链接指定时间内访问记录监控数据
-     * @param requestParam
-     * @return
-     */
-    @GetMapping("/api/short-link/admin/v1/stats/access-record")
-    public Result<Page<ShortLinkStatsAccessRecordRespDTO>> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
-        return shortLinkActualRemoteService.shortLinkStatsAccessRecord(
-                requestParam.getFullShortUrl(),
-                requestParam.getGid(),
-                requestParam.getStartDate(),
-                requestParam.getEndDate());
+                requestParam.getEndDate()
+        );
     }
 
     /**
@@ -59,21 +43,38 @@ public class ShortLinkStatsController {
         return shortLinkActualRemoteService.groupShortLinkStats(
                 requestParam.getGid(),
                 requestParam.getStartDate(),
-                requestParam.getEndDate());
+                requestParam.getEndDate()
+        );
+    }
+
+    /**
+     * 访问单个短链接指定时间内访问记录监控数据
+     */
+    @GetMapping("/api/short-link/admin/v1/stats/access-record")
+    public Result<Page<ShortLinkStatsAccessRecordRespDTO>> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
+        return shortLinkActualRemoteService.shortLinkStatsAccessRecord(
+                requestParam.getFullShortUrl(),
+                requestParam.getGid(),
+                requestParam.getStartDate(),
+                requestParam.getEndDate(),
+                requestParam.getEnableStatus(),
+                requestParam.getCurrent(),
+                requestParam.getSize()
+        );
     }
 
     /**
      * 访问分组短链接指定时间内访问记录监控数据
-     * @param requestParam
-     * @return
      */
     @GetMapping("/api/short-link/admin/v1/stats/access-record/group")
     public Result<Page<ShortLinkStatsAccessRecordRespDTO>> groupShortLinkStatsAccessRecord(ShortLinkGroupStatsAccessRecordReqDTO requestParam) {
         return shortLinkActualRemoteService.groupShortLinkStatsAccessRecord(
                 requestParam.getGid(),
                 requestParam.getStartDate(),
-                requestParam.getEndDate()
-                );
+                requestParam.getEndDate(),
+                requestParam.getCurrent(),
+                requestParam.getSize()
+        );
     }
 }
 

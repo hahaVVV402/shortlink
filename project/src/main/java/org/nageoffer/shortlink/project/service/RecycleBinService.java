@@ -6,7 +6,7 @@ import org.nageoffer.shortlink.project.dao.entity.ShortLinkDO;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinRemoveReqDTO;
 import org.nageoffer.shortlink.project.dto.req.RecycleBinSaveReqDTO;
-import org.nageoffer.shortlink.project.dto.req.ShortLinkRecyclePageReqDTO;
+import org.nageoffer.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
 import org.nageoffer.shortlink.project.dto.resq.ShortLinkPageRespDTO;
 
 /**
@@ -24,7 +24,7 @@ public interface RecycleBinService extends IService<ShortLinkDO> {
      * @return
      */
 
-    IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkRecyclePageReqDTO requestParam);
+    IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkRecycleBinPageReqDTO requestParam);
 
     /**
      * 恢复短链接
