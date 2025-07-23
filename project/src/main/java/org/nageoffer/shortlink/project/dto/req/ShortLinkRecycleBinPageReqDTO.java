@@ -10,7 +10,7 @@ import java.util.List;
  * 短链接分页请求参数
  */
 @Data
-public class ShortLinkRecyclePageReqDTO extends Page<ShortLinkDO> {
+public class ShortLinkRecycleBinPageReqDTO extends Page<ShortLinkDO> {
 
     /**
      * 分组标识
