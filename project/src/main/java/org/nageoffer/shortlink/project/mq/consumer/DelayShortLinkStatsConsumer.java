@@ -41,20 +41,20 @@ public class DelayShortLinkStatsConsumer implements InitializingBean {
                         try {
                             ShortLinkStatsRecordDTO statsRecord = delayedQueue.poll();
                             if (statsRecord != null) {
-                                if (messageQueueIdempotentHandler.isMessageProcessed(statsRecord.getKeys())) {
-                                    // 判断当前的这个消息是否执行完成
-                                    if (messageQueueIdempotentHandler.isMessageAccomplish(statsRecord.getKeys())){
+                                if (!messageQueueIdempotentHandler.isMessageProcessed(statsRecord.getKeys())) {
+                                    // 判断当前的这个消息流程是否执行完成
+                                    if (messageQueueIdempotentHandler.isAccomplish(statsRecord.getKeys())) {
                                         return;
                                     }
                                     throw new ServiceException("消息未完成流程，需要消息队列重试");
                                 }
                                 try {
-                                    shortLinkService.shortLinkStats(null, null, statsRecord);
+                                    shortLinkService.shortLinkStats(statsRecord);
                                 } catch (Throwable ex) {
                                     messageQueueIdempotentHandler.delMessageProcessed(statsRecord.getKeys());
-                                    log.error("延迟记录短链接监控消费异常",ex);
+                                    log.error("延迟记录短链接监控消费异常", ex);
                                 }
-                                messageQueueIdempotentHandler.setMessageAccomplish(statsRecord.getKeys());
+                                messageQueueIdempotentHandler.setAccomplish(statsRecord.getKeys());
                                 continue;
                             }
                             LockSupport.parkUntil(500);
@@ -66,6 +66,6 @@ public class DelayShortLinkStatsConsumer implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        onMessage();
+        // onMessage();
     }
 }

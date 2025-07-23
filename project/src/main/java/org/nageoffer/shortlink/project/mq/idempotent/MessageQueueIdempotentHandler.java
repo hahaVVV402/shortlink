@@ -26,7 +26,7 @@ public class MessageQueueIdempotentHandler {
      * @param messageId
      * @return
      */
-    public boolean isMessageAccomplish(String messageId) {
+    public boolean isAccomplish(String messageId) {
         String key = IDEMPOTENT_KEY_PREFIX + messageId;
         return Objects.equals(stringRedisTemplate.opsForValue().get(key), "1");
     }
@@ -35,7 +35,7 @@ public class MessageQueueIdempotentHandler {
      * 设置消息处理完成的幂等标识
      * @param messageId
      */
-    public void setMessageAccomplish(String messageId) {
+    public void setAccomplish(String messageId) {
         String key = IDEMPOTENT_KEY_PREFIX + messageId;
         stringRedisTemplate.opsForValue().set(key, "1", 10, TimeUnit.MINUTES);
     }
