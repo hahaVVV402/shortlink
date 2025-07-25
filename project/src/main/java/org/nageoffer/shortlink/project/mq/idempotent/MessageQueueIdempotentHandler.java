@@ -16,9 +16,12 @@ public class MessageQueueIdempotentHandler {
     private final StringRedisTemplate stringRedisTemplate;
     private static final String IDEMPOTENT_KEY_PREFIX = "short-link:idempotent:";
 
-    public boolean isMessageProcessed(String messageId) {
+    public boolean isMessageBeingProcessed(String messageId) {
         String key = IDEMPOTENT_KEY_PREFIX + messageId;
-        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, "1", 2, TimeUnit.MINUTES));
+        // 尝试设置 key,如果 key 不存在则设置成功
+        // setIfAbsent 相当于 Redis 的 SETNX 命令
+        // 设置值为"0",过期时间为 2 分钟
+        return Boolean.FALSE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, "0", 2, TimeUnit.MINUTES));
     }
 
     /**

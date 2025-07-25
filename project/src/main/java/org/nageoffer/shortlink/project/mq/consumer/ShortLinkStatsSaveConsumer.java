@@ -56,7 +56,7 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
     public void onMessage(MapRecord<String, String, String> message) {
         String stream = message.getStream();
         RecordId id = message.getId();
-        if (messageQueueIdempotentHandler.isMessageProcessed(id.toString())){
+        if (messageQueueIdempotentHandler.isMessageBeingProcessed(id.toString())){
             // 判断当前的这个消息是否执行完成
             if (messageQueueIdempotentHandler.isAccomplish(id.toString())){
                 return;
